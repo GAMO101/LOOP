@@ -27,9 +27,18 @@ if isinstance(data, list) and len(data) > 0:
         image_url = event.get('image', 'No Image')
         location = event.get('location', 'No location')
 
-        # Kombinovaná správa s názvom, dátumom a odkazom na obrázok
-        message = f"Title: {title}\nDate: {event_date}\nImage: {image_url}"
-        requests.post('https://api.telegram.org/botID/sendMessage?chat_id=-1002145717073&text=%s' % message)
+        # Kombinovaná správa s názvom, dátumom, a odkazom na obrázok
+        message = f"Title: {title}\nDate: {event_date}\nLocation: {location}\nImage: {image_url}"
+
+        # Pošleme správu pomocou Telegram API
+        response = requests.post(f'https://api.telegram.org/bot{token}/sendMessage', data={
+            'chat_id': chat_id,
+            'text': message
+        })
+
+        # Skontrolujeme, či bola správa úspešne odoslaná
+        if response.status_code != 200:
+            failed_events.append(title)  # Pridáme názov eventu do zoznamu neúspešných
 
     # Výpis neúspešných odoslaní (ak nejaké sú)
     if failed_events:
