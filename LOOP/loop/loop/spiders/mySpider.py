@@ -26,7 +26,7 @@ class MySpider(scrapy.Spider):
     def parse(self, response):
         # Extraction of date info, titles and images
         date_info = response.xpath('//div[contains(@class, "avia_textblock")]/h2/strong/text()').getall()
-        event_titles = response.xpath('//div[contains(@class, "avia_textblock")]/h3[1]/text()').getall()  # Adjusted to extract title text
+        event_titles = response.xpath('//div[contains(@class, "avia_textblock")]/h3/span[@lang="en-AT"]/text() | //div[contains(@class, "avia_textblock")]/h3[1]/text() | //div[contains(@class, "avia_textblock")]/h3/span/text()').getall()
         event_images = response.xpath('//div[contains(@class, "avia-image-overlay-wrap")]/a/img/@src').getall()
 
         self.log(f"Extracted date info: {date_info}")
